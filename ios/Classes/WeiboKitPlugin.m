@@ -55,12 +55,15 @@ static NSString *const ARGUMENT_KEY_RESULT_EXPIRESIN = @"expiresIn";
     return self;
 }
 
+bool hasRegistered = false;
+
 - (void)handleMethodCall:(FlutterMethodCall *)call
                   result:(FlutterResult)result {
     if ([METHOD_REGISTERAPP isEqualToString:call.method]) {
         NSString *appKey = call.arguments[ARGUMENT_KEY_APPKEY];
         NSString *universalLink = call.arguments[ARGUMENT_KEY_UNIVERSALLINK];
         [WeiboSDK registerApp:appKey universalLink:universalLink];
+        hasRegistered = true;
         result(nil);
     } else if ([METHOD_ISINSTALLED isEqualToString:call.method]) {
         result([NSNumber numberWithBool:[WeiboSDK isWeiboAppInstalled]]);
@@ -148,6 +151,7 @@ static NSString *const ARGUMENT_KEY_RESULT_EXPIRESIN = @"expiresIn";
 }
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray * _Nonnull))restorationHandler {
+    if (!hasRegistered) return false;
     return [WeiboSDK handleOpenUniversalLink:userActivity delegate:self];;
 }
 
