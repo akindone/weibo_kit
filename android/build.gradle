@@ -16,6 +16,11 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
+
+        // 私仓
+        flatDir {
+            dirs project(':weibo_kit').file('libs')
+        }
     }
 }
 
@@ -50,5 +55,6 @@ android {
 dependencies {
     // v10.10.0
     vendorImplementation 'androidx.appcompat:appcompat:1.0.0'
-    vendorImplementation 'io.github.sinaweibosdk:core:11.11.2@aar'
+//    vendorImplementation 'io.github.sinaweibosdk:core:11.11.2@aar'
+    vendorImplementation(name: 'core-11.11.2', ext: 'aar')
 }
